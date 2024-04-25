@@ -15,6 +15,9 @@ const getGCD = (arr) => {
     const uclidResult = curr > next ? uclid(curr, next) : uclid(next, curr);
     if (uclidResult > 1) {
       최대공약수 = uclidResult;
+    } else {
+        최대공약수 = 1;
+      break;
     }
   }
   return 최대공약수;
@@ -22,7 +25,6 @@ const getGCD = (arr) => {
 
 function solution(arrayA, arrayB) {
   let result = 0;
-
   const gcdA = arrayA.length > 1 ? getGCD(arrayA) : arrayA[0];
   if (gcdA >= 1 && arrayB.every((num) => num % gcdA !== 0) && gcdA > result) {
     result = gcdA;
