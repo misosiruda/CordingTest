@@ -18,8 +18,10 @@ int solution(string myString, string pat) {
 
     // 같은게 있는지 확인
     bool is_same = true;
-    int tmptmp = myString.size() - tmp.size();
-    for(int i = 0; i <= tmptmp; i++){
+    if (myString.size() < tmp.size()){
+        return 0;
+    }
+    for(int i = 0; i <= myString.size() - tmp.size(); i++){
         for(int j = 0; j < tmp.size(); j++){
             is_same = true;
             if(myString[i + j] != tmp[j]){
