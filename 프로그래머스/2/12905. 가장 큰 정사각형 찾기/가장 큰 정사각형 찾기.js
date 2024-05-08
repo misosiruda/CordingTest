@@ -26,7 +26,7 @@ function solution(board)
                 if(e2 == 1) return 1;
             }
         }
+        return 0;
     }
-
     return Math.pow(max, 2);
 }
