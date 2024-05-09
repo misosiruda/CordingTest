@@ -1,69 +1,50 @@
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.*;
 
 class Solution {
     public int solution(String s) {
-        int answer = 0;
-        for (int i = 0; i < s.length(); i++) {
-            s = s.substring(1) + s.toCharArray()[0];
-            char[] arr = s.toCharArray();
-            Deque<Character> stack = new ArrayDeque<>();
-            boolean isOkay = true;
-            find: for (char c : arr) {
-                switch (c) {
-                    case '{':
-                        stack.addLast(c);
-                        break;
-                    case '[':
-                        stack.addLast(c);
-                        break;
-                    case '(':
-                        stack.addLast(c);
-                        break;
-                    case '}':
-                        if (stack.size() == 0) {
-                            isOkay = false;
-                            break find;
-                        }
-                        if (stack.peekLast() == '{') {
-                            stack.pollLast();
-                        } else {
-                            isOkay = false;
-                            break find;
-                        }
-                        break;
-                    case ']':
-                        if (stack.size() == 0) {
-                            isOkay = false;
-                            break find;
-                        }
-                        if (stack.peekLast() == '[') {
-                            stack.pollLast();
-                        } else {
-                            isOkay = false;
-                            break find;
-                        }
-                        break;
-                    case ')':
-                        if (stack.size() == 0) {
-                            isOkay = false;
-                            break find;
-                        }
-                        if (stack.peekLast() == '(') {
-                            stack.pollLast();
-                        } else {
-                            isOkay = false;
-                            break find;
-                        }
-                        break;
+    int answer = 0;
+    char[] ch = s.toCharArray();
+    Queue<Character> queue = new LinkedList<>();
+    for (char x: ch){
+        queue.offer(x);
+    }
+    int count = 0;
+
+    first:for(int i=0; i<s.length(); i++){
+        Stack<Character> stack = new Stack<>();
+
+        for (char x: queue){
+            if (x=='(' || x=='{' || x=='['){
+                stack.push(x);
+            }else{
+                if (stack.isEmpty()){
+                  count++;
+                    char leftTmp = queue.remove();
+                    queue.offer(leftTmp);
+                  continue first;
+                }else if (stack.peek()=='(' && x==')'){
+                    stack.pop();
+                }else if (stack.peek()=='[' && x==']'){
+                    stack.pop();
+                }else if (stack.peek()=='{' && x=='}'){
+                    stack.pop();
+                }else{
+                    count++;
+                    char leftTmp = queue.remove();
+                    queue.offer(leftTmp);
+                    continue first;
                 }
             }
-            if (!isOkay || stack.size() > 0) {
-                continue;
-            } else {
-                answer++;
-            }
         }
-        return answer;
+        if (stack.size()!=0){
+            count++;
+        }
+
+        char leftTmp = queue.remove();
+        queue.offer(leftTmp);
     }
+    answer = s.length() - count;
+
+    return answer;
+}
 }
