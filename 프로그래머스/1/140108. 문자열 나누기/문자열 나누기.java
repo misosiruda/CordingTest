@@ -1,30 +1,32 @@
 class Solution {
-    public int solution(String s) {
+    public static int solution(String s) {
         int answer = 0;
 
-        char[] s_arr = s.toCharArray(); 
-
-        int cnt=0;
-        for(int i=0; i<s_arr.length; i= i+cnt){ 
-            int preCnt=1;
-            int nextCnt=0;
-            cnt = 0;
-            char pre = s_arr[i]; 
-            for(int k=i+1; k<s_arr.length; k++){
-               char next = s_arr[k];
-               if(pre == next){
-                   preCnt++;
-               }else{
-                   nextCnt++;
-               } 
-               if(preCnt == nextCnt){
-                   cnt = preCnt + nextCnt;
-                   answer++;
-                   break;
-               }
+        int i = 0;
+        while (s.length() > 0 && i < s.length()) {
+            char target = s.charAt(0);
+            int targetCnt = 0;
+            int otherCnt = 0;
+            for(i = 0; i < s.length(); i++) {
+                if(s.charAt(i) == target) {
+                    targetCnt++;
+                }
+                else {
+                    otherCnt++;
+                }
+                if(targetCnt == otherCnt) {
+                    s = s.substring(i + 1);
+                    // System.out.println("next : " + s + ";");
+                    answer++;
+                    i = 0;
+                    break;
+                }
             }
-            if(cnt == 0) return answer + 1;
-        } 
+        }
+
+        if(s.length() != 0) {
+            answer++;
+        }
         return answer;
     }
 }
