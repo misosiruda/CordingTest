@@ -1,58 +1,52 @@
-function solution(book_time) {
-  const times = book_time.map((v, idx) => {
-    const [start, end] = v;
-
-    const parsedStart = start.split(":").map((v2, i) => {
-      if (i === 0) {
-        if (v2 === "00" || v2 === "0") return 24 * 60;
-        return Number(v2) * 60;
-      }
-
-      return Number(v2)
-    }).reduce((acc, value) => acc + value);
-
-    const parsedEnd = end.split(":").map((v2, i) => {
-      if (i === 0) {
-        if (v2 === "00" || v2 === "0") return 24 * 60;
-        return Number(v2) * 60;
-      }
-
-      return Number(v2)
-    }).reduce((acc, value) => acc + value) + 10;
-
-    return [parsedStart, parsedEnd]
-  });
-
-  const sorted_times = times.sort((a, b) => a[0] - b[0]);
-
-  const rooms = []
-  let cnt = 0;
-
-  for (let i = 0; i < sorted_times.length; i++) {
-    const [nStart, nEnd] = sorted_times[i];
-
-    if (rooms.length <= 0) {
-      rooms.push(sorted_times[i]);
-      cnt++;
-    }else {
-      let flag = false;
-
-      for (let k = 0; k < rooms.length; k ++) {
-        const [rStart, rEnd] = rooms[k];
-
-        if (rEnd <= nStart) {
-          rooms[k] = sorted_times[i];
-          flag=true
-          break;
+function HourToMinute(str)
+{
+    let s = '';
+    let m = 0;
+    for(let i=0;i<str.length;i++)
+    {
+        if(str[i] == ':')
+        {
+            m += Number(s) * 60;
+            s = '';
+            continue;
         }
-      }
-
-      if (!flag) {
-        rooms.push(sorted_times[i]);
-        cnt++;
-      }
+        s += str[i];
     }
-  }  
+    m += Number(s);
+    return m;
+}
 
-  return rooms.length;
+function strTimeArrToNumberMinuteArr(book_time)
+{
+    let arr = []
+    let enter = 0, exit = 0;
+    for(e of book_time)
+    {
+        enter = HourToMinute(e[0]);
+        exit = HourToMinute(e[1]) + 10;
+        arr.push([enter, exit]);
+    }
+    return arr;
+}
+
+function solution(book_time) 
+{
+    var answer = 0;
+    let book = [];
+    book = strTimeArrToNumberMinuteArr(book_time);
+    book = book.sort((a,b) => a[0] - b[0]);
+    for(let i=0;i<book.length;i++)
+    {
+        answer++;
+        for(let j=0;j<i;j++)
+        {
+            if(book[i][0] >= book[j][1])
+            {
+                answer--;
+                book[j][1] = 1440;
+                break;
+            }
+        }
+    }
+    return answer;
 }
